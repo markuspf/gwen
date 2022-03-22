@@ -1,12 +1,21 @@
 #pragma once
 
+#include <iostream>
 #include <memory>
+#include <unordered_map>
+#include <vector>
+
+#include <fmt/core.h>
 
 namespace gwen {
 template <typename VertexId> struct Graph {
   struct Edge {
     VertexId from;
     VertexId to;
+
+    auto stringofant() -> std::string {
+      return fmt::format("{} --> {}", from, to);
+    }
   };
 
   struct Vertex {
@@ -22,7 +31,24 @@ template <typename VertexId> struct Graph {
     }
   }
 
+  auto printofant() -> void {
+    std::cout << "Hi, I am a GWEN" << std::endl;
+    std::cout << " my vertices are: ";
+    for (auto const [vid, vert] : vertices) {
+      std::cout << vid << ", ";
+      std::cout << "in-edges:  ";
+      for (auto const e : vert.in) {
+        std::cout << e->stringofant() << ", ";
+      }
+      std::cout << ", out-edges: ";
+      for (auto const e : vert.out) {
+        std::cout << e->stringofant() << ", ";
+      }
+      std::cout << std::endl;
+    }
+  }
+
   std::vector<std::shared_ptr<Edge>> edges;
-  std::vector<std::unordered_map<VertexId, Vertex>> vertices;
-}
+  std::unordered_map<VertexId, Vertex> vertices;
+};
 } // namespace gwen
